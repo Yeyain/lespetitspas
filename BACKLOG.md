@@ -85,7 +85,7 @@
   - Couleurs configurées comme variables de thème (Tailwind / ShadCN).
   - Polices Plus Jakarta Sans et DM Sans chargées.
   - La page d'accueil reflète la charte.
-- **Statut** : À faire
+- **Statut** : Terminé
 - **Contraintes / Dépendances** : US-02, US-03.
 - **Description technique** : `app/globals.css` (variables CSS du thème), `app/layout.tsx` (chargement via `next/font/google`).
 
