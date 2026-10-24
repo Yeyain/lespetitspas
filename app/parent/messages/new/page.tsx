@@ -2,6 +2,7 @@ import Link from "next/link"
 import { ArrowLeft, CheckCheck, Eye, MessageCircleHeart, Send } from "lucide-react"
 
 import { MessageForm } from "./message-form"
+import { EmptyState } from "@/components/empty-state"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -92,11 +93,13 @@ export default async function NewMessagePage() {
         </h2>
 
         {messages.length === 0 ? (
-          <div className="flex flex-col items-center gap-2 rounded-2xl bg-card px-6 py-10 text-center text-muted-foreground shadow-sm">
-            <MessageCircleHeart className="size-8 text-accent" />
-            Vous n&apos;avez pas encore écrit à l&apos;équipe. N&apos;hésitez
-            pas, nous sommes là !
-          </div>
+          <EmptyState
+            icon={MessageCircleHeart}
+            iconClassName="bg-accent/40"
+            title="Vous n'avez pas encore envoyé de message à l'équipe"
+            description="N'hésitez pas, nous sommes là !"
+            className="bg-card shadow-sm"
+          />
         ) : (
           <ul className="flex flex-col gap-3">
             {messages.map((message) => {

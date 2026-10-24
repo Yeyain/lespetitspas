@@ -1,9 +1,10 @@
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { ArrowLeft, Sun } from "lucide-react"
+import { ArrowLeft, CalendarHeart, Sunrise } from "lucide-react"
 
 import { ChildAvatar } from "@/components/child-avatar"
 import { DayPicker } from "@/components/day-picker"
+import { EmptyState } from "@/components/empty-state"
 import { EventTimeline } from "@/components/event-timeline"
 import { Button } from "@/components/ui/button"
 import {
@@ -116,10 +117,22 @@ export default async function ParentChildPage({
           <EventTimeline
             events={timeline}
             empty={
-              <div className="flex flex-col items-center gap-2 rounded-xl bg-muted/50 py-10 text-center text-muted-foreground">
-                <Sun className="size-8 text-secondary" />
-                Pas encore d&apos;événement pour cette journée
-              </div>
+              day === today ? (
+                <EmptyState
+                  icon={Sunrise}
+                  iconClassName="bg-secondary/40"
+                  title={`La journée de ${child.first_name} n'a pas encore commencé`}
+                  description="Dès que l'équipe aura noté quelque chose, vous le verrez ici."
+                  className="bg-muted/50"
+                />
+              ) : (
+                <EmptyState
+                  icon={CalendarHeart}
+                  iconClassName="bg-primary/40"
+                  title={`Aucun événement n'a été noté pour ${child.first_name} ce jour-là`}
+                  className="bg-muted/50"
+                />
+              )
             }
           />
         </CardContent>

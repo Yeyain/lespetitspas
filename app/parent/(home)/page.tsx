@@ -1,7 +1,8 @@
 import Link from "next/link"
-import { ChevronRight, MessageCircle, Sun } from "lucide-react"
+import { ChevronRight, HeartHandshake, MessageCircle } from "lucide-react"
 
 import { ChildAvatar } from "@/components/child-avatar"
+import { EmptyState } from "@/components/empty-state"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { requireRole } from "@/lib/auth"
@@ -75,15 +76,13 @@ export default async function ParentPage() {
       </Button>
 
       {children.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center gap-3 py-6 text-center">
-            <Sun className="size-10 text-secondary" />
-            <p className="max-w-sm text-muted-foreground">
-              Aucun enfant n&apos;est encore rattaché à votre compte. Contactez
-              la crèche si vous pensez que c&apos;est une erreur.
-            </p>
-          </CardContent>
-        </Card>
+        <EmptyState
+          icon={HeartHandshake}
+          iconClassName="bg-primary/40"
+          title="Aucun enfant n'est encore rattaché à votre compte"
+          description="Contactez la crèche pour que l'équipe puisse faire le lien."
+          className="bg-card shadow-sm"
+        />
       ) : (
         <ul className="flex flex-col gap-4">
           {children.map((child) => {
