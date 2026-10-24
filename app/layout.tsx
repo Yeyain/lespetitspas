@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans, Plus_Jakarta_Sans } from "next/font/google";
 import { LogoutButton } from "@/components/logout-button";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <LogoutButton />
         {children}
+        <Toaster position="top-center" />
       </body>
     </html>
   );

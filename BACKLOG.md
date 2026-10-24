@@ -361,9 +361,9 @@
   - Événements classés du plus récent au plus ancien.
   - Filtre par jour.
   - Chaque événement montre son type, son heure et son auteur.
-- **Statut** : À faire
+- **Statut** : En cours
 - **Contraintes / Dépendances** : US-13, US-23.
-- **Description technique** : Composant de timeline partagé avec l'espace parent (US-31).
+- **Description technique** : Fiche enfant `/staff/children/[id]` : identité, section, allergies (nouvelle colonne `children.allergies`), « Autorisation médicament : oui / non » (autorisation valide aujourd'hui), prénoms des parents, messages « nouveau » des parents, timeline du jour en ordre chronologique (icône, heure, « Saisi par [Prénom] », incidents mis en évidence), sélecteur de date (`?date=AAAA-MM-JJ`, jours précédent / suivant), état vide, bouton « Ajouter un événement » provisoire (« Bientôt disponible »). Journées calculées à l'heure de Paris. Reste à tester avec des données (US-18) et à extraire la timeline en composant partagé avec l'espace parent (US-31). Idée : bouton « Marquer comme traité » sur les messages directement depuis la fiche (US-36).
 
 ---
 

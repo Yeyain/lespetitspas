@@ -4,7 +4,7 @@ import { useMemo, useState } from "react"
 import Link from "next/link"
 import { Search } from "lucide-react"
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { ChildAvatar } from "@/components/child-avatar"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -25,10 +25,6 @@ function normalize(text: string) {
     .replace(/[̀-ͯ]/g, "")
     .toLowerCase()
     .trim()
-}
-
-function initials(child: ChildItem) {
-  return `${child.first_name.charAt(0)}${child.last_name.charAt(0)}`.toUpperCase()
 }
 
 export function ChildrenList({ items }: { items: ChildItem[] }) {
@@ -89,19 +85,7 @@ export function ChildrenList({ items }: { items: ChildItem[] }) {
               >
                 <Card className="transition-shadow hover:shadow-md">
                   <CardContent className="flex items-center gap-4">
-                    <Avatar className="size-14">
-                      {child.photo_url && (
-                        <AvatarImage
-                          src={child.photo_url}
-                          alt={`${child.first_name} ${child.last_name}`}
-                        />
-                      )}
-                      <AvatarFallback
-                        className={`${SECTIONS[child.section].color} font-heading text-lg font-semibold text-foreground`}
-                      >
-                        {initials(child)}
-                      </AvatarFallback>
-                    </Avatar>
+                    <ChildAvatar child={child} className="size-14" textClassName="text-lg" />
                     <div className="flex min-w-0 flex-col items-start gap-1.5">
                       <p className="truncate font-heading text-lg font-semibold">
                         {child.first_name} {child.last_name}
