@@ -45,6 +45,11 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  /* Ombres légères, teintées marine */
+  --shadow-xs: 0 1px 2px 0 rgb(26 35 126 / 0.04);
+  --shadow-sm: 0 2px 8px -2px rgb(26 35 126 / 0.08);
+  --shadow-md: 0 6px 16px -4px rgb(26 35 126 / 0.10);
+  --shadow-lg: 0 12px 32px -8px rgb(26 35 126 / 0.12);
 }
 
 :root {
@@ -72,7 +77,7 @@
   --chart-3: #F48FB1;
   --chart-4: #1A237E;
   --chart-5: #78909C;
-  --radius: 0.75rem;
+  --radius: 1rem;
   --sidebar: #FFFFFF;
   --sidebar-foreground: #1A237E;
   --sidebar-primary: #9FA8DA;
@@ -128,6 +133,6 @@
     @apply font-sans;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading;
+    @apply font-heading font-semibold tracking-tight;
   }
 }

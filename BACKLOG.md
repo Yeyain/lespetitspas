@@ -87,7 +87,18 @@
   - La page d'accueil reflète la charte.
 - **Statut** : Terminé
 - **Contraintes / Dépendances** : US-02, US-03.
-- **Description technique** : `app/globals.css` (variables CSS du thème), `app/layout.tsx` (chargement via `next/font/google`).
+- **Description technique** : `app/globals.css` (variables CSS du thème, arrondis 1rem, ombres légères teintées marine), `app/layout.tsx` (chargement via `next/font/google`), composants ShadCN `Button` et `Card` ajustés (plus grands, plus arrondis). Pas de `tailwind.config` : Tailwind v4 se configure dans `globals.css`. Idée : prévoir un thème sombre aux couleurs de la charte (l'actuel est gris par défaut).
+
+### US-44 – Connexion Supabase préparée
+- **User Story** : En tant que développeur, je veux des clients Supabase prêts à l'emploi et typés, afin de lire et écrire les données sans erreur de nom de colonne.
+- **Entité** : Toutes les tables
+- **Critères d'acceptation** :
+  - `@supabase/supabase-js` et `@supabase/ssr` installés.
+  - Un client navigateur et un client serveur (session via cookies).
+  - Types TypeScript des 6 tables : `profiles`, `children`, `parent_children`, `events`, `medication_authorizations`, `messages`.
+- **Statut** : Terminé
+- **Contraintes / Dépendances** : US-04, US-05.
+- **Description technique** : `lib/supabase/client.ts`, `lib/supabase/server.ts`, `lib/supabase/database.types.ts`. Clés lues depuis `.env.local`, jamais en dur. Idée : remplacer plus tard les types écrits à la main par ceux générés avec `supabase gen types`.
 
 ---
 

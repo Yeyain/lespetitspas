@@ -30,6 +30,7 @@ Next.js (App Router, TypeScript), Tailwind CSS, ShadCN UI, Supabase (PostgreSQL,
 ## Design
 Couleurs : primary #9FA8DA, secondary #80CBC4, accent #F48FB1, fond #F0F4F8, surface #FFFFFF, texte #1A237E, texte secondaire #78909C, erreur #EF9A9A.
 Polices : titres « Plus Jakarta Sans », texte « DM Sans ».
+Tous les écrans doivent être construits en composants ShadCN et respecter ma charte graphique.
 
 ## Ne jamais toucher
 - Les fichiers `.env*` et `JOURNAL.md` : ne pas les lire à voix haute, ne pas les modifier, ne jamais les committer.
