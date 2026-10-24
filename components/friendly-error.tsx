@@ -11,9 +11,11 @@ import { Card, CardContent } from "@/components/ui/card"
 export function FriendlyError({
   error,
   retry,
+  message = "Nous n'arrivons pas à afficher la journée pour le moment.",
 }: {
   error: Error & { digest?: string }
   retry: () => void
+  message?: string
 }) {
   useEffect(() => {
     console.error(error)
@@ -27,8 +29,8 @@ export function FriendlyError({
           <div className="flex flex-col gap-1">
             <h1 className="text-xl">Oups, un petit souci de chargement</h1>
             <p className="max-w-sm text-muted-foreground">
-              Nous n&apos;arrivons pas à afficher la journée pour le moment.
-              Pas d&apos;inquiétude, vos informations sont en sécurité.
+              {message} Pas d&apos;inquiétude, vos informations sont en
+              sécurité.
             </p>
           </div>
           <Button size="lg" onClick={() => retry()}>

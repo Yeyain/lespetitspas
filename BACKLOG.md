@@ -410,9 +410,9 @@
   - Texte limité à 500 caractères avec compteur visible.
   - Un message vide ou trop long est refusé.
   - Confirmation d'envoi affichée.
-- **Statut** : À faire
+- **Statut** : En cours
 - **Contraintes / Dépendances** : US-15, US-16.
-- **Description technique** : Validation côté interface et côté base (contrainte de longueur).
+- **Description technique** : Validation côté interface et côté base (contrainte de longueur). **Avancement** : page `/parent/messages/new` : choix de l'enfant (présélectionné s'il n'y en a qu'un), compteur « x / 500 », bouton désactivé pendant l'envoi, confirmation « Votre message a bien été transmis à l'équipe », historique du parent (Envoyé / Lu par l'équipe / Traité), états chargement / vide / erreur. Server Action `sendMessage` : rôle parent, `parent_id` lu côté serveur, lien `parent_children` vérifié, texte revérifié, statut `nouveau` fixé côté serveur. Commentaire TODO « envoyer un email Resend au staff ici » placé dans le code (US-38). Reste à tester avec deux comptes parents (US-40).
 
 ### US-35 – Liste des messages pour le staff
 - **User Story** : En tant que staff, je veux voir tous les messages reçus, afin de ne rien oublier.
