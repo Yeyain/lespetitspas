@@ -288,9 +288,9 @@
   - Trois onglets ou filtres : Bébés, Moyens, Grands.
   - Un clic sur un enfant ouvre sa fiche.
   - Affichage rapide, utilisable sur tablette.
-- **Statut** : À faire
+- **Statut** : En cours
 - **Contraintes / Dépendances** : US-10, US-17, US-20.
-- **Description technique** : Composants ShadCN (Tabs, Card), lecture via Supabase côté serveur.
+- **Description technique** : Page `/staff` : grille de cartes ShadCN (photo ou initiales, prénom, nom, section), recherche par nom sans majuscules ni accents, filtre Tous / Bébés / Moyens / Grands (Tabs). Lecture via Supabase côté serveur, filtrage instantané dans le navigateur. Fiche provisoire `/staff/children/[id]` (prénom + nom). Nouvelle colonne `children.photo_url` ajoutée aux types. Reste à tester avec un compte staff et les 30 enfants de test (US-18). Idée : permettre d'ajouter la photo d'un enfant (stockage Supabase).
 
 ### US-24 – Saisie d'un repas
 - **User Story** : En tant que staff, je veux saisir un repas en quelques secondes, afin de ne pas perdre de temps auprès des enfants.

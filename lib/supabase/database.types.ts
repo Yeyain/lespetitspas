@@ -45,6 +45,7 @@ export type Database = {
           last_name: string
           birth_date: string
           section: Section
+          photo_url: string | null
         }
         Insert: {
           id?: string
@@ -52,6 +53,7 @@ export type Database = {
           last_name: string
           birth_date: string
           section: Section
+          photo_url?: string | null
         }
         Update: Partial<Database["public"]["Tables"]["children"]["Insert"]>
         Relationships: []
