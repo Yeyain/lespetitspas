@@ -6,10 +6,10 @@ import {
   CircleCheck,
   CircleX,
   MessageCircle,
+  Plus,
   Users,
 } from "lucide-react"
 
-import { AddEventButton } from "./add-event-button"
 import { DayPicker } from "./day-picker"
 import { ChildAvatar } from "@/components/child-avatar"
 import { Badge } from "@/components/ui/badge"
@@ -30,7 +30,8 @@ import {
   parisDayRange,
   todayInParis,
 } from "@/lib/dates"
-import { EVENT_TYPES, summarizeDetails } from "@/lib/event-types"
+import { describeDetails } from "@/lib/event-details"
+import { EVENT_TYPES } from "@/lib/event-types"
 import { SECTIONS } from "@/lib/sections"
 import { createClient } from "@/lib/supabase/server"
 
@@ -214,7 +215,12 @@ export default async function ChildPage({
         <CardContent className="flex flex-col gap-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <DayPicker day={day} today={today} />
-            <AddEventButton />
+            <Button asChild size="lg">
+              <Link href={`/staff/children/${id}/events/new`}>
+                <Plus data-icon="inline-start" />
+                Ajouter un événement
+              </Link>
+            </Button>
           </div>
 
           {dayEvents.length === 0 ? (
@@ -227,7 +233,7 @@ export default async function ChildPage({
               {dayEvents.map((event) => {
                 const type = EVENT_TYPES[event.type]
                 const Icon = type.icon
-                const summary = summarizeDetails(event.details)
+                const lines = describeDetails(event.type, event.details)
                 const isIncident = event.type === "incident"
                 return (
                   <li
@@ -253,7 +259,20 @@ export default async function ChildPage({
                           {formatTime(event.occurred_at)}
                         </time>
                       </div>
-                      {summary && <p className="break-words">{summary}</p>}
+                      {lines.length > 0 && (
+                        <dl className="flex flex-col gap-0.5">
+                          {lines.map((line) => (
+                            <div key={line.label} className="break-words">
+                              <dt className="inline text-muted-foreground">
+                                {line.label} :{" "}
+                              </dt>
+                              <dd className="inline whitespace-pre-line">
+                                {line.value}
+                              </dd>
+                            </div>
+                          ))}
+                        </dl>
+                      )}
                       <p className="text-sm text-muted-foreground">
                         Saisi par {event.author?.first_name ?? "—"}
                       </p>

@@ -75,3 +75,16 @@ export function formatLongDay(day: string): string {
     year: "numeric",
   }).format(new Date(`${day}T00:00:00Z`))
 }
+
+const TIME_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/
+
+// Vérifie une heure au format HH:MM.
+export function isValidTime(value: unknown): value is string {
+  return typeof value === "string" && TIME_PATTERN.test(value)
+}
+
+// Date ISO correspondant à un jour (AAAA-MM-JJ) et une heure (HH:MM) à Paris.
+export function parisTimeToIso(day: string, time: string): string {
+  const guess = new Date(`${day}T${time}:00Z`)
+  return new Date(`${day}T${time}:00${parisOffset(guess)}`).toISOString()
+}

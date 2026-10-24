@@ -188,7 +188,7 @@
   - Sans autorisation confirmée et valide, aucun événement « médicament » ne peut être créé.
 - **Statut** : À faire
 - **Contraintes / Dépendances** : US-13.
-- **Description technique** : Règle critique appliquée **dans la base** (trigger ou politique RLS), pas seulement dans l'interface.
+- **Description technique** : Règle critique appliquée **dans la base** (trigger ou politique RLS), pas seulement dans l'interface. Idée : un trigger qui refuse tout événement `medicament` dont `authorization_id` ne couvre pas l'enfant et la date, en dernier rempart derrière la Server Action de US-28.
 
 ### US-15 – Table des messages
 - **User Story** : En tant que parent, je veux que mes messages soient stockés, afin que l'équipe puisse les traiter.
@@ -299,9 +299,9 @@
   - Choix de ce qui a été mangé et de la quantité (ex. tout, la moitié, peu).
   - L'événement apparaît aussitôt dans la timeline.
   - Auteur enregistré automatiquement.
-- **Statut** : À faire
+- **Statut** : En cours
 - **Contraintes / Dépendances** : US-13, US-23.
-- **Description technique** : Formulaire court avec boutons de choix, validation côté serveur.
+- **Description technique** : Formulaire court avec boutons de choix, validation côté serveur. **Avancement** : parties 1 à 3 faites : formulaire, enregistrement par la Server Action `createEvent` (`app/staff/children/[id]/events/new/actions.ts` : rôle staff vérifié, auteur lu côté serveur, champs revalidés, heure de Paris), retour à la fiche où l'événement apparaît avec ses détails. Reste à tester avec un compte staff et des données (US-18) avant de passer en « Terminé ».
 
 ### US-25 – Saisie d'une sieste
 - **User Story** : En tant que staff, je veux noter une sieste, afin d'informer les parents du repos de leur enfant.
@@ -309,18 +309,18 @@
 - **Critères d'acceptation** :
   - Heure de début et de fin (ou durée).
   - Fin de sieste cohérente (après le début).
-- **Statut** : À faire
+- **Statut** : En cours
 - **Contraintes / Dépendances** : US-13, US-23.
-- **Description technique** : Détails stockés en JSON (début, fin).
+- **Description technique** : Détails stockés en JSON (début, fin). **Avancement** : parties 1 à 3 faites : formulaire, enregistrement par la Server Action `createEvent` (`app/staff/children/[id]/events/new/actions.ts` : rôle staff vérifié, auteur lu côté serveur, champs revalidés, heure de Paris), retour à la fiche où l'événement apparaît avec ses détails. Reste à tester avec un compte staff et des données (US-18) avant de passer en « Terminé ».
 
 ### US-26 – Saisie d'une activité
 - **User Story** : En tant que staff, je veux noter une activité, afin de partager la journée de l'enfant.
 - **Entité** : `events`
 - **Critères d'acceptation** :
   - Titre de l'activité et commentaire optionnel.
-- **Statut** : À faire
+- **Statut** : En cours
 - **Contraintes / Dépendances** : US-13, US-23.
-- **Description technique** : Même mécanique que US-24.
+- **Description technique** : Même mécanique que US-24. **Avancement** : parties 1 à 3 faites : formulaire, enregistrement par la Server Action `createEvent` (`app/staff/children/[id]/events/new/actions.ts` : rôle staff vérifié, auteur lu côté serveur, champs revalidés, heure de Paris), retour à la fiche où l'événement apparaît avec ses détails. Reste à tester avec un compte staff et des données (US-18) avant de passer en « Terminé ».
 
 ### US-27 – Saisie d'un incident
 - **User Story** : En tant que staff, je veux signaler un incident, afin que les parents soient informés clairement.
@@ -328,9 +328,9 @@
 - **Critères d'acceptation** :
   - Description obligatoire de l'incident.
   - L'incident est mis en évidence dans la timeline.
-- **Statut** : À faire
+- **Statut** : En cours
 - **Contraintes / Dépendances** : US-13, US-23.
-- **Description technique** : Type `incident`, style visuel distinct (couleur d'erreur de la charte).
+- **Description technique** : Type `incident`, style visuel distinct (couleur d'erreur de la charte). **Avancement** : parties 1 à 3 faites : formulaire, enregistrement par la Server Action `createEvent` (`app/staff/children/[id]/events/new/actions.ts` : rôle staff vérifié, auteur lu côté serveur, champs revalidés, heure de Paris), retour à la fiche où l'événement apparaît avec ses détails. Reste à tester avec un compte staff et des données (US-18) avant de passer en « Terminé ».
 
 ### US-28 – Saisie d'un médicament avec blocage
 - **User Story** : En tant que staff, je veux saisir un médicament administré, tout en étant bloqué si l'autorisation parentale manque, afin de respecter la sécurité de l'enfant.
@@ -339,9 +339,9 @@
   - Sans autorisation confirmée et valide, l'enregistrement est refusé avec un message explicite.
   - Avec autorisation, l'événement est créé (médicament, dose, heure).
   - Le blocage fonctionne même si on contourne l'interface.
-- **Statut** : À faire
+- **Statut** : En cours
 - **Contraintes / Dépendances** : US-14, US-23. **Règle métier critique.**
-- **Description technique** : Contrôle double : interface (bouton désactivé) et base de données (trigger / RLS).
+- **Description technique** : Contrôle double : interface (bouton désactivé) et base de données (trigger / RLS). **Avancement** : parties 1 à 3 faites : formulaire, enregistrement par la Server Action `createEvent` (`app/staff/children/[id]/events/new/actions.ts` : rôle staff vérifié, auteur lu côté serveur, champs revalidés, heure de Paris), retour à la fiche où l'événement apparaît avec ses détails. Reste à tester avec un compte staff et des données (US-18) avant de passer en « Terminé ». Médicament : autorisation revérifiée avec `findValidAuthorization`, `authorization_id` rempli ; verrou en base à faire (US-14).
 
 ### US-29 – Gestion des autorisations de médicaments
 - **User Story** : En tant que staff, je veux enregistrer l'autorisation confirmée d'un parent, afin de pouvoir ensuite saisir le médicament.
