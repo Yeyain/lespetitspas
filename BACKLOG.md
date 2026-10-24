@@ -242,9 +242,9 @@
 - **Critères d'acceptation** :
   - Un message d'erreur clair s'affiche en cas d'identifiants incorrects.
   - Une fois connecté, la session persiste.
-- **Statut** : À faire
+- **Statut** : En cours
 - **Contraintes / Dépendances** : US-11.
-- **Description technique** : Supabase Auth avec `@supabase/ssr`, page `app/login`.
+- **Description technique** : Supabase Auth avec `@supabase/ssr`, page `app/login` (formulaire ShadCN + action serveur `app/login/actions.ts`). Session rafraîchie à chaque requête par `proxy.ts` (nouveau nom du « middleware » dans Next.js 16). Message d'erreur testé. Reste à tester avec un vrai compte staff et un vrai compte parent (US-18).
 
 ### US-20 – Redirection selon le rôle
 - **User Story** : En tant qu'utilisateur, je veux arriver directement sur mon espace, afin de ne pas me perdre.
@@ -252,9 +252,9 @@
 - **Critères d'acceptation** :
   - Staff redirigé vers l'espace staff, parent vers l'espace parent.
   - Un parent ne peut pas accéder aux pages staff, même en tapant l'adresse.
-- **Statut** : À faire
+- **Statut** : En cours
 - **Contraintes / Dépendances** : US-19.
-- **Description technique** : Middleware Next.js lisant le rôle, groupes de routes `(staff)` et `(parent)`.
+- **Description technique** : Après connexion, lecture de `profiles.role` et redirection vers `/staff` ou `/parent`. Chaque page vérifie le rôle avec `requireRole()` (`lib/auth.ts`) : un parent qui tape `/staff` est renvoyé vers `/parent`. Reste à tester avec un vrai compte staff et un vrai compte parent (US-18).
 
 ### US-21 – Invitation d'un parent par le staff
 - **User Story** : En tant que staff, je veux inviter un parent par email, afin qu'il crée son compte.
@@ -273,9 +273,9 @@
 - **Critères d'acceptation** :
   - Un bouton de déconnexion est visible partout.
   - Sans session, toute page protégée renvoie vers la connexion.
-- **Statut** : À faire
+- **Statut** : En cours
 - **Contraintes / Dépendances** : US-19.
-- **Description technique** : Middleware et action serveur de déconnexion.
+- **Description technique** : `proxy.ts` renvoie vers `/login` sans session (testé sur `/staff` et `/parent`). Bouton « Se déconnecter » dans le layout global (`components/logout-button.tsx`), action `logout`. Reste à tester avec un vrai compte staff et un vrai compte parent (US-18).
 
 ---
 
