@@ -13,7 +13,7 @@ export type Role = "staff" | "parent"
 export type Section = "bebes" | "moyens" | "grands"
 export type EventType = "repas" | "sieste" | "activite" | "medicament" | "incident"
 export type AuthorizationSource = "application" | "papier"
-export type MessageStatus = "nouveau" | "traité"
+export type MessageStatus = "nouveau" | "lu" | "traité"
 
 export type Database = {
   public: {

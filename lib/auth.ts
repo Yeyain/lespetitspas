@@ -1,3 +1,4 @@
+import { cache } from "react"
 import { redirect } from "next/navigation"
 
 import { createClient } from "@/lib/supabase/server"
@@ -10,7 +11,8 @@ export const HOME_BY_ROLE: Record<Role, string> = {
 }
 
 // Profil de la personne connectée, ou null si personne n'est connecté.
-export async function getCurrentProfile(): Promise<Profile | null> {
+// `cache` : une seule lecture par requête, même si plusieurs composants l'appellent.
+export const getCurrentProfile = cache(async (): Promise<Profile | null> => {
   const supabase = await createClient()
   const {
     data: { user },
@@ -24,7 +26,7 @@ export async function getCurrentProfile(): Promise<Profile | null> {
     .single()
 
   return profile
-}
+})
 
 // À appeler en haut d'une page réservée à un rôle : renvoie vers /login si
 // personne n'est connecté, ou vers son propre espace si le rôle ne correspond pas.

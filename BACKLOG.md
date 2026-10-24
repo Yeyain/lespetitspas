@@ -194,7 +194,7 @@
 - **User Story** : En tant que parent, je veux que mes messages soient stockés, afin que l'équipe puisse les traiter.
 - **Entité** : `messages`
 - **Critères d'acceptation** :
-  - Un message a un parent, un enfant concerné, un texte de 500 caractères maximum et un statut (nouveau, en cours, traité).
+  - Un message a un parent, un enfant concerné, un texte de 500 caractères maximum et un statut (nouveau, lu, traité).
 - **Statut** : À faire
 - **Contraintes / Dépendances** : US-11, US-12.
 - **Description technique** : Contrainte `CHECK (char_length(contenu) <= 500)`.
@@ -419,22 +419,22 @@
 - **Entité** : `messages`
 - **Critères d'acceptation** :
   - Liste triée du plus récent au plus ancien.
-  - Filtre par statut (nouveau, en cours, traité).
+  - Badge par statut (nouveau, lu, traité) ; les nouveaux ressortent.
   - Le message indique le parent et l'enfant concernés.
-- **Statut** : À faire
+- **Statut** : En cours
 - **Contraintes / Dépendances** : US-15, US-17.
-- **Description technique** : Page `(staff)/messages`.
+- **Description technique** : Page `/staff/messages` (`app/staff/messages/`), du plus récent au plus ancien, prénom du parent et de l'enfant, date et heure de Paris. Lien « Messages » avec le nombre de nouveaux dans le menu staff (`app/staff/layout.tsx`). Reste à tester avec des données (US-18). Idée : filtre par statut si la liste devient longue.
 
 ### US-36 – Traitement d'un message
 - **User Story** : En tant que staff, je veux changer le statut d'un message, afin de suivre ce qui a été traité.
 - **Entité** : `messages`
 - **Critères d'acceptation** :
-  - Passage de « nouveau » à « en cours » puis « traité ».
+  - Passage de « nouveau » à « lu » (au clic) puis « traité » (bouton) ; jamais de retour en arrière.
   - Le nom de la personne qui a traité est conservé.
   - Le parent ne peut pas changer le statut.
-- **Statut** : À faire
+- **Statut** : En cours
 - **Contraintes / Dépendances** : US-35.
-- **Description technique** : Colonnes `statut` et `traite_par`, politique RLS de mise à jour réservée au staff.
+- **Description technique** : Server Actions `markAsRead` et `markAsHandled` (`app/staff/messages/actions.ts`) : rôle staff vérifié, `handled_by` lu côté serveur, `handled_at` = maintenant, mise à jour conditionnelle sur le statut actuel. Si la RLS refuse la modification, un message l'explique (aucun contournement). Reste à vérifier que la politique RLS de mise à jour autorise bien le staff.
 
 ---
 

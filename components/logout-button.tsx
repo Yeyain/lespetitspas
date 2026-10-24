@@ -15,9 +15,10 @@ export async function LogoutButton() {
 
   return (
     <form action={logout} className="fixed top-4 right-4 z-50">
-      <Button type="submit" variant="outline">
+      <Button type="submit" variant="outline" aria-label="Se déconnecter">
         <LogOut data-icon="inline-start" />
-        Se déconnecter
+        {/* Sur téléphone, l'icône seule laisse la place au menu. */}
+        <span className="hidden sm:inline">Se déconnecter</span>
       </Button>
     </form>
   )
