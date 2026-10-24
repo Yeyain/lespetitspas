@@ -128,3 +128,43 @@ export function describeDetails(
     (line): line is { label: string; value: string } => line.value !== null
   )
 }
+
+// Résumé en une ligne, pour les parents : « Midi : tout », « 13:00 – 14:30, calme »…
+// (le type, avec son icône, est affiché à côté).
+export function summarizeEvent(type: string, details: unknown): string | null {
+  const d =
+    details && typeof details === "object" && !Array.isArray(details)
+      ? (details as Record<string, unknown>)
+      : {}
+  const lower = (s: string | null) => s?.toLowerCase() ?? null
+  const join = (...parts: (string | null)[]) =>
+    parts.filter(Boolean).join(", ") || null
+
+  switch (type) {
+    case "repas": {
+      const moment = lower(labelOf(REPAS_MOMENTS, d.moment))
+      const qualite = lower(labelOf(REPAS_QUALITES, d.qualite))
+      if (moment && qualite) return `${moment} : ${qualite}`
+      return moment ?? qualite
+    }
+    case "sieste": {
+      const debut = text(d.heure_debut)
+      const fin = text(d.heure_fin)
+      const horaires = debut && fin ? `${debut} – ${fin}` : debut
+      return join(horaires, lower(labelOf(SIESTE_QUALITES, d.qualite)))
+    }
+    case "activite":
+      return text(d.nom)
+    case "medicament":
+      return join(text(d.nom), text(d.dose))
+    case "incident": {
+      const gravite = lower(labelOf(INCIDENT_GRAVITES, d.gravite))
+      return join(
+        lower(labelOf(INCIDENT_TYPES, d.type)),
+        gravite && `gravité ${gravite}`
+      )
+    }
+    default:
+      return null
+  }
+}

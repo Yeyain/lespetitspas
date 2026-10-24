@@ -376,9 +376,9 @@
   - Je vois uniquement les événements de mes enfants.
   - Lecture seule : aucune modification possible.
   - Filtre par jour.
-- **Statut** : À faire
+- **Statut** : En cours
 - **Contraintes / Dépendances** : US-16, US-20, US-30.
-- **Description technique** : Réutilise le composant timeline, données protégées par RLS.
+- **Description technique** : Réutilise le composant timeline, données protégées par RLS. **Avancement** : accueil `/parent` (`app/parent/(home)/`) : une carte par enfant rattaché (photo ou initiales, dernier événement du jour avec icône, heure de Paris, résumé lisible et « Saisi par »), bouton « Envoyer un message à l'équipe », états chargement (squelettes), vide et erreur (« Réessayer »). Lecture avec le client de la personne connectée (RLS) + filtre `parent_children` en plus. Pages provisoires `/parent/children/[id]` (404 si l'enfant n'est pas visible) et `/parent/messages/new`. Reste : timeline complète par jour.
 
 ### US-32 – Mention de l'auteur
 - **User Story** : En tant que parent, je veux savoir qui a saisi chaque événement, afin d'avoir confiance dans l'information.
@@ -395,9 +395,9 @@
 - **Critères d'acceptation** :
   - Un sélecteur d'enfant est visible si j'en ai plusieurs.
   - L'interface est utilisable sur téléphone.
-- **Statut** : À faire
+- **Statut** : En cours
 - **Contraintes / Dépendances** : US-31.
-- **Description technique** : Sélecteur ShadCN, design « mobile d'abord ».
+- **Description technique** : Sélecteur ShadCN, design « mobile d'abord ». **Avancement** : l'accueil parent affiche déjà une carte par enfant ; le sélecteur sur la fiche enfant reste à faire.
 
 ---
 
@@ -483,7 +483,7 @@
   - L'accès direct à une page staff est refusé.
 - **Statut** : À faire
 - **Contraintes / Dépendances** : US-16, US-20.
-- **Description technique** : Deux comptes parents fictifs, vérification des listes et des accès directs.
+- **Description technique** : Deux comptes parents fictifs, vérification des listes et des accès directs. À vérifier aussi : un parent lit bien les événements de ses enfants et le prénom de l'auteur (« Saisi par ») ; `/parent/children/[id]` d'un autre enfant renvoie une 404.
 
 ### US-41 – Test du parcours de saisie staff
 - **User Story** : En tant que développeur, je veux tester le parcours principal, afin de détecter vite les régressions.
