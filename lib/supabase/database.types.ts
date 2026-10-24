@@ -224,7 +224,14 @@ export type Database = {
       }
     }
     Views: Record<string, never>
-    Functions: Record<string, never>
+    Functions: {
+      // Prénom de l'auteur de chaque événement, limité par la base aux
+      // événements des enfants rattachés au parent connecté.
+      get_event_authors: {
+        Args: { p_event_ids: string[] }
+        Returns: { event_id: string; author_first_name: string }[]
+      }
+    }
     Enums: Record<string, never>
     CompositeTypes: Record<string, never>
   }

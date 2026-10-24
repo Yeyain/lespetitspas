@@ -10,8 +10,9 @@ import {
   Users,
 } from "lucide-react"
 
-import { DayPicker } from "./day-picker"
 import { ChildAvatar } from "@/components/child-avatar"
+import { DayPicker } from "@/components/day-picker"
+import { EventTimeline } from "@/components/event-timeline"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -25,13 +26,10 @@ import { requireRole } from "@/lib/auth"
 import {
   formatDateTime,
   formatLongDay,
-  formatTime,
   isValidDay,
   parisDayRange,
   todayInParis,
 } from "@/lib/dates"
-import { describeDetails } from "@/lib/event-details"
-import { EVENT_TYPES } from "@/lib/event-types"
 import { SECTIONS } from "@/lib/sections"
 import { createClient } from "@/lib/supabase/server"
 
@@ -223,65 +221,15 @@ export default async function ChildPage({
             </Button>
           </div>
 
-          {dayEvents.length === 0 ? (
-            <div className="flex flex-col items-center gap-2 rounded-xl bg-muted/50 py-10 text-center text-muted-foreground">
-              <CalendarX className="size-8" />
-              Aucun événement pour cette journée
-            </div>
-          ) : (
-            <ol className="flex flex-col gap-3">
-              {dayEvents.map((event) => {
-                const type = EVENT_TYPES[event.type]
-                const Icon = type.icon
-                const lines = describeDetails(event.type, event.details)
-                const isIncident = event.type === "incident"
-                return (
-                  <li
-                    key={event.id}
-                    className={`flex gap-4 rounded-xl p-4 ${
-                      isIncident
-                        ? "bg-destructive/20 ring-1 ring-destructive"
-                        : "bg-muted/50"
-                    }`}
-                  >
-                    <div
-                      className={`flex size-11 shrink-0 items-center justify-center rounded-full ${type.color}`}
-                    >
-                      <Icon className="size-5" />
-                    </div>
-                    <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                      <div className="flex items-baseline justify-between gap-3">
-                        <p className="font-heading font-semibold">{type.label}</p>
-                        <time
-                          dateTime={event.occurred_at}
-                          className="shrink-0 font-medium tabular-nums"
-                        >
-                          {formatTime(event.occurred_at)}
-                        </time>
-                      </div>
-                      {lines.length > 0 && (
-                        <dl className="flex flex-col gap-0.5">
-                          {lines.map((line) => (
-                            <div key={line.label} className="break-words">
-                              <dt className="inline text-muted-foreground">
-                                {line.label} :{" "}
-                              </dt>
-                              <dd className="inline whitespace-pre-line">
-                                {line.value}
-                              </dd>
-                            </div>
-                          ))}
-                        </dl>
-                      )}
-                      <p className="text-sm text-muted-foreground">
-                        Saisi par {event.author?.first_name ?? "—"}
-                      </p>
-                    </div>
-                  </li>
-                )
-              })}
-            </ol>
-          )}
+          <EventTimeline
+            events={dayEvents}
+            empty={
+              <div className="flex flex-col items-center gap-2 rounded-xl bg-muted/50 py-10 text-center text-muted-foreground">
+                <CalendarX className="size-8" />
+                Aucun événement pour cette journée
+              </div>
+            }
+          />
         </CardContent>
       </Card>
     </main>

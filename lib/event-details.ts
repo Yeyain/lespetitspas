@@ -76,57 +76,80 @@ function text(value: unknown): string | null {
   return typeof value === "string" && value.trim() !== "" ? value.trim() : null
 }
 
+// Durée entre deux heures HH:MM : « 1 h 30 », « 45 min ».
+export function formatDuration(start: string, end: string): string | null {
+  const toMinutes = (t: string) => {
+    const [h, m] = t.split(":").map(Number)
+    return h * 60 + m
+  }
+  if (!/^\d{2}:\d{2}$/.test(start) || !/^\d{2}:\d{2}$/.test(end)) return null
+  const minutes = toMinutes(end) - toMinutes(start)
+  if (minutes <= 0) return null
+  const h = Math.floor(minutes / 60)
+  const m = minutes % 60
+  if (h === 0) return `${m} min`
+  return m === 0 ? `${h} h` : `${h} h ${String(m).padStart(2, "0")}`
+}
+
+export type DetailLine = { label: string; value: string; emphasis?: boolean }
+
 // Lignes lisibles (« Qualité : Moitié ») pour afficher les détails d'un événement.
-export function describeDetails(
-  type: string,
-  details: unknown
-): { label: string; value: string }[] {
+// `emphasis` signale une information à faire ressortir (incident urgent).
+export function describeDetails(type: string, details: unknown): DetailLine[] {
   const d =
     details && typeof details === "object" && !Array.isArray(details)
       ? (details as Record<string, unknown>)
       : {}
-  const lines: { label: string; value: string | null }[] = []
+  const lines: { label: string; value: string | null; emphasis?: boolean }[] =
+    []
 
   switch (type) {
     case "repas":
       lines.push(
         { label: "Moment", value: labelOf(REPAS_MOMENTS, d.moment) },
-        { label: "Qualité", value: labelOf(REPAS_QUALITES, d.qualite) }
+        { label: "Qualité", value: labelOf(REPAS_QUALITES, d.qualite) },
+        { label: "Note", value: text(d.note) }
       )
       break
-    case "sieste":
+    case "sieste": {
+      const debut = text(d.heure_debut)
+      const fin = text(d.heure_fin)
       lines.push(
-        {
-          label: "Horaires",
-          value:
-            text(d.heure_debut) && text(d.heure_fin)
-              ? `${d.heure_debut} – ${d.heure_fin}`
-              : text(d.heure_debut),
-        },
-        { label: "Qualité", value: labelOf(SIESTE_QUALITES, d.qualite) }
+        { label: "Début", value: debut },
+        { label: "Fin", value: fin },
+        { label: "Durée", value: debut && fin ? formatDuration(debut, fin) : null },
+        { label: "Qualité", value: labelOf(SIESTE_QUALITES, d.qualite) },
+        { label: "Note", value: text(d.note) }
       )
       break
+    }
     case "activite":
-      lines.push({ label: "Activité", value: text(d.nom) })
+      lines.push(
+        { label: "Activité", value: text(d.nom) },
+        { label: "Note", value: text(d.note) }
+      )
       break
     case "medicament":
       lines.push(
         { label: "Médicament", value: text(d.nom) },
+        // L'heure est déjà affichée à droite de l'événement.
         { label: "Dose", value: text(d.dose) }
       )
       break
     case "incident":
       lines.push(
         { label: "Type", value: labelOf(INCIDENT_TYPES, d.type) },
-        { label: "Gravité", value: labelOf(INCIDENT_GRAVITES, d.gravite) }
+        {
+          label: "Gravité",
+          value: labelOf(INCIDENT_GRAVITES, d.gravite),
+          emphasis: d.gravite === "urgent",
+        },
+        { label: "Description", value: text(d.note) }
       )
       break
   }
-  lines.push({ label: type === "incident" ? "Description" : "Note", value: text(d.note) })
 
-  return lines.filter(
-    (line): line is { label: string; value: string } => line.value !== null
-  )
+  return lines.filter((line): line is DetailLine => line.value !== null)
 }
 
 // Résumé en une ligne, pour les parents : « Midi : tout », « 13:00 – 14:30, calme »…

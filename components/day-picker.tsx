@@ -9,13 +9,24 @@ import { Input } from "@/components/ui/input"
 import { addDays, isValidDay } from "@/lib/dates"
 
 // Sélecteur de date : la date choisie est mise dans l'adresse (?date=...).
-export function DayPicker({ day, today }: { day: string; today: string }) {
+// `allowFuture={false}` empêche de choisir un jour après aujourd'hui.
+export function DayPicker({
+  day,
+  today,
+  allowFuture = true,
+}: {
+  day: string
+  today: string
+  allowFuture?: boolean
+}) {
   const router = useRouter()
   const pathname = usePathname()
   const [pending, startTransition] = useTransition()
+  const canGoForward = allowFuture || day < today
 
   function goTo(next: string) {
     if (!isValidDay(next)) return
+    if (!allowFuture && next > today) next = today
     const url = next === today ? pathname : `${pathname}?date=${next}`
     startTransition(() => router.push(url, { scroll: false }))
   }
@@ -37,6 +48,7 @@ export function DayPicker({ day, today }: { day: string; today: string }) {
       <Input
         type="date"
         value={day}
+        max={allowFuture ? undefined : today}
         onChange={(e) => goTo(e.target.value)}
         aria-label="Choisir une date"
         className="h-10 w-auto"
@@ -45,6 +57,7 @@ export function DayPicker({ day, today }: { day: string; today: string }) {
         variant="outline"
         size="icon"
         onClick={() => goTo(addDays(day, 1))}
+        disabled={!canGoForward}
         aria-label="Jour suivant"
       >
         <ChevronRight />

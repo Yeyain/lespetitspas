@@ -5,6 +5,7 @@ import { ChildAvatar } from "@/components/child-avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { requireRole } from "@/lib/auth"
+import { getEventAuthors } from "@/lib/event-authors"
 import { formatTime, parisDayRange, todayInParis } from "@/lib/dates"
 import { summarizeEvent } from "@/lib/event-details"
 import { EVENT_TYPES } from "@/lib/event-types"
@@ -34,9 +35,7 @@ export default async function ParentPage() {
   const { data: events, error: eventsError } = childIds.length
     ? await supabase
         .from("events")
-        .select(
-          "id, child_id, type, occurred_at, details, author:profiles!events_created_by_fkey(first_name)"
-        )
+        .select("id, child_id, type, occurred_at, details")
         .in("child_id", childIds)
         .gte("occurred_at", start)
         .lt("occurred_at", end)
@@ -51,6 +50,12 @@ export default async function ParentPage() {
       lastEventByChild.set(event.child_id, event)
     }
   }
+
+  // « Saisi par » : prénoms via la fonction sécurisée de la base.
+  const authors = await getEventAuthors(
+    supabase,
+    [...lastEventByChild.values()].map((e) => e.id)
+  )
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-8 sm:py-10">
@@ -103,7 +108,10 @@ export default async function ParentPage() {
                         <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
                       </div>
                       {event ? (
-                        <LastEvent event={event} />
+                        <LastEvent
+                          event={event}
+                          authorName={authors.get(event.id)}
+                        />
                       ) : (
                         <p className="rounded-xl bg-muted/50 px-4 py-3 text-muted-foreground">
                           Pas encore d&apos;événement aujourd&apos;hui
@@ -123,13 +131,14 @@ export default async function ParentPage() {
 
 function LastEvent({
   event,
+  authorName,
 }: {
   event: {
     type: keyof typeof EVENT_TYPES
     occurred_at: string
     details: unknown
-    author: { first_name: string } | null
   }
+  authorName?: string
 }) {
   const type = EVENT_TYPES[event.type]
   const Icon = type.icon
@@ -153,7 +162,7 @@ function LastEvent({
           </span>
         </p>
         <p className="text-sm text-muted-foreground">
-          Saisi par {event.author?.first_name ?? "—"}
+          Saisi par {authorName ?? "l'équipe"}
         </p>
       </div>
     </div>

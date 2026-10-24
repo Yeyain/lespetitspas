@@ -363,7 +363,7 @@
   - Chaque événement montre son type, son heure et son auteur.
 - **Statut** : En cours
 - **Contraintes / Dépendances** : US-13, US-23.
-- **Description technique** : Fiche enfant `/staff/children/[id]` : identité, section, allergies (nouvelle colonne `children.allergies`), « Autorisation médicament : oui / non » (autorisation valide aujourd'hui), prénoms des parents, messages « nouveau » des parents, timeline du jour en ordre chronologique (icône, heure, « Saisi par [Prénom] », incidents mis en évidence), sélecteur de date (`?date=AAAA-MM-JJ`, jours précédent / suivant), état vide, bouton « Ajouter un événement » provisoire (« Bientôt disponible »). Journées calculées à l'heure de Paris. Reste à tester avec des données (US-18) et à extraire la timeline en composant partagé avec l'espace parent (US-31). Idée : bouton « Marquer comme traité » sur les messages directement depuis la fiche (US-36).
+- **Description technique** : Fiche enfant `/staff/children/[id]` : identité, section, allergies (nouvelle colonne `children.allergies`), « Autorisation médicament : oui / non » (autorisation valide aujourd'hui), prénoms des parents, messages « nouveau » des parents, timeline du jour en ordre chronologique (icône, heure, « Saisi par [Prénom] », incidents mis en évidence), sélecteur de date (`?date=AAAA-MM-JJ`, jours précédent / suivant), état vide, bouton « Ajouter un événement » provisoire (« Bientôt disponible »). Journées calculées à l'heure de Paris. Reste à tester avec des données (US-18) ; timeline extraite en composant partagé avec l'espace parent (US-31), couleur et icône distinctes par type, durée de sieste, gravité « urgent » mise en évidence. Idée : bouton « Marquer comme traité » sur les messages directement depuis la fiche (US-36).
 
 ---
 
@@ -378,16 +378,16 @@
   - Filtre par jour.
 - **Statut** : En cours
 - **Contraintes / Dépendances** : US-16, US-20, US-30.
-- **Description technique** : Réutilise le composant timeline, données protégées par RLS. **Avancement** : accueil `/parent` (`app/parent/(home)/`) : une carte par enfant rattaché (photo ou initiales, dernier événement du jour avec icône, heure de Paris, résumé lisible et « Saisi par »), bouton « Envoyer un message à l'équipe », états chargement (squelettes), vide et erreur (« Réessayer »). Lecture avec le client de la personne connectée (RLS) + filtre `parent_children` en plus. Pages provisoires `/parent/children/[id]` (404 si l'enfant n'est pas visible) et `/parent/messages/new`. Reste : timeline complète par jour.
+- **Description technique** : Réutilise le composant timeline, données protégées par RLS. **Avancement** : accueil `/parent` (`app/parent/(home)/`) : une carte par enfant rattaché (photo ou initiales, dernier événement du jour avec icône, heure de Paris, résumé lisible et « Saisi par »), bouton « Envoyer un message à l'équipe », états chargement (squelettes), vide et erreur (« Réessayer »). Lecture avec le client de la personne connectée (RLS) + filtre `parent_children` en plus. Timeline `/parent/children/[id]` : accès vérifié côté serveur via `parent_children` (sinon retour à `/parent`), événements du jour du plus récent au plus ancien, sélecteur de date sans futur, squelettes / vide / erreur. Composants partagés avec le staff : `components/event-timeline.tsx`, `components/day-picker.tsx`. Page provisoire `/parent/messages/new`. Reste à tester avec deux comptes parents (US-40).
 
 ### US-32 – Mention de l'auteur
 - **User Story** : En tant que parent, je veux savoir qui a saisi chaque événement, afin d'avoir confiance dans l'information.
 - **Entité** : `events`, `profiles`
 - **Critères d'acceptation** :
   - Chaque événement affiche « Saisi par [Prénom] ».
-- **Statut** : À faire
+- **Statut** : En cours
 - **Contraintes / Dépendances** : US-31. **Règle métier.**
-- **Description technique** : Jointure `events` → `profiles`. Ne pas exposer d'autres données du profil.
+- **Description technique** : Jointure `events` → `profiles`. Ne pas exposer d'autres données du profil. **Avancement** : un parent ne peut pas lire `profiles` (RLS) : le prénom vient de la fonction sécurisée `get_event_authors(p_event_ids)` (un seul appel par page, client du parent, helper `lib/event-authors.ts`), sur l'accueil et la timeline parent. Sans prénom ou si l'appel échoue : « Saisi par l'équipe » (erreur notée dans les logs serveur). Reste à tester avec un compte parent (US-40).
 
 ### US-33 – Parent avec plusieurs enfants
 - **User Story** : En tant que parent de plusieurs enfants, je veux passer facilement de l'un à l'autre, afin de tout suivre depuis un seul compte.
